@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protótipo Interativo - Aprendizagem Modular</title>
+    <style>
+        /* RNF-02: Estilo minimalista e focado */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        
+        :root {
+            --bg-color: #f8f9fa;
+            --main-color: #ffffff;
+            --text-color: #212529;
+            --header-color: #343a40;
+            --border-color: #dee2e6;
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+
+            /* RN-02: Cores do Modelo de Progressão */
+            --not-started: #ebedf0;
+            --reviewed-once: #9be9a8;
+            --reviewed-multiple: #40c463;
+            --mastered: #30a14e;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container { 
+            max-width: 900px; 
+            width: 100%;
+            margin: auto; 
+            background: var(--main-color); 
+            padding: 2rem; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            transition: all 0.3s ease-in-out;
+        }
+
+        h1, h2 { color: var(--header-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.5rem; margin-top: 2rem; }
+
+        form { display: flex; flex-direction: column; gap: 1rem; }
+        input, textarea { 
+            padding: 0.85rem; 
+            border: 1px solid var(--border-color); 
+            border-radius: 6px; 
+            font-size: 1rem; 
+            font-family: 'Inter', sans-serif;
+        }
+        textarea { min-height: 180px; resize: vertical; }
+        button { 
+            padding: 0.85rem 1.5rem; 
+            border: none; 
+            border-radius: 6px; 
+            background-color: var(--primary-color); 
+            color: white; 
+            font-size: 1rem; 
+            font-weight: 500;
+            cursor: pointer; 
+            transition: background-color 0.2s; 
+            align-self: flex-start;
+        }
+        button:hover { background-color: var(--primary-hover); }
+
+        .hidden { display: none !important; }
+
+        .feedback-box {
+            text-align: center;
+            padding: 2rem;
+            border: 1px dashed var(--border-color);
+            border-radius: 6px;
+        }
+        .spinner { 
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid #3498db; 
+            border-radius: 50%; 
+            width: 40px; 
+            height: 40px; 
+            animation: spin 1s linear infinite; 
+            margin: 20px auto; 
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* RF-F03: Painel de Atividade */
+        #activity-panel { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); 
+            gap: 6px; 
+            margin-top: 1.5rem; 
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        .chunk-cell { 
+            width: 45px; 
+            height: 45px; 
+            border-radius: 6px; 
+            border: 1px solid rgba(0,0,0,0.05); 
+            cursor: pointer; 
+            transition: transform 0.2s, background-color 0.3s; 
+        }
+        .chunk-cell:hover { transform: scale(1.15); box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 10; }
+
+        /* Cores do progresso aplicadas às células */
+        .status-not_started { background-color: var(--not-started); }
+        .status-reviewed_once { background-color: var(--reviewed-once); }
+        .status-reviewed_multiple { background-color: var(--reviewed-multiple); }
+        .status-mastered { background-color: var(--mastered); }
+
+        /* RF-F05: Modal para exibir o conteúdo do Chunk */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 1000; 
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 8px; 
+            max-width: 600px; 
+            width: 90%; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-content h3 { margin-top: 0; font-size: 1.5rem; }
+        .modal-content p { line-height: 1.6; max-height: 40vh; overflow-y: auto; }
+        .modal-buttons { margin-top: 1.5rem; display: flex; gap: 1rem; }
+        #close-modal-btn { background-color: #6c757d; }
+        #close-modal-btn:hover { background-color: #5a6268; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Aprendizagem Modular</h1>
+        
+        <section id="creation-section">
+            <h2>Criar Novo Tópico</h2>
+            <form id="topic-form">
+                <input type="text" id="topic-name" placeholder="Nome do Tópico (ex: História da Computação)" required value="História da Computação">
+                <textarea id="topic-description" required>O ENIAC (Electronic Numerical Integrator and Computer) foi o primeiro computador eletrônico de grande escala. Concluído em 1945, foi desenvolvido na Universidade da Pensilvânia para o Exército dos EUA com o objetivo de calcular tabelas de tiro de artilharia. Pesava 30 toneladas e ocupava uma sala inteira.
+
+A arquitetura de von Neumann, proposta por John von Neumann em 1945, foi um marco. Ela introduziu a ideia de um computador de programa armazenado, onde tanto as instruções do programa quanto os dados são mantidos na mesma memória. Este conceito é a base da maioria dos computadores modernos.
+
+Nos anos 70, surgiram os microprocessadores, como o Intel 4004. Essa inovação permitiu a criação de computadores menores e mais acessíveis, pavimentando o caminho para o computador pessoal (PC).
+
+A Apple, com o Apple II, e a IBM, com o IBM PC, popularizaram os computadores domésticos e de escritório nos anos 80. A introdução de interfaces gráficas de usuário (GUIs), como a do Apple Macintosh, tornou os computadores muito mais fáceis de usar.
+
+A internet, que começou como um projeto militar chamado ARPANET nos anos 60, transformou-se em uma rede global nas décadas de 90 e 2000. Ela conectou o mundo e mudou fundamentalmente a comunicação, o comércio e o acesso à informação.
+
+Hoje, a computação está em toda parte, desde smartphones em nossos bolsos até vastos data centers na nuvem que alimentam serviços de inteligência artificial e big data, continuando a evoluir a um ritmo exponencial.
+                </textarea>
+                <button type="submit">Criar e Modularizar Tópico</button>
+            </form>
+        </section>
+
+        <section id="processing-feedback" class="hidden">
+            <div class="feedback-box">
+                <p><strong>Processando...</strong> Seu tópico está sendo analisado e dividido em módulos de aprendizado. Isso simula a chamada à IA.</p>
+                <div class="spinner"></div>
+            </div>
+        </section>
+
+        <section id="topic-view" class="hidden">
+            <h2 id="topic-title"></h2>
+            <p>Clique em um quadrado para revisar um "chunk". A cor mudará para refletir seu progresso.</p>
+            <div id="activity-panel"></div>
+            <br>
+            <button id="back-to-creation">← Criar Outro Tópico</button>
+        </section>
+    </div>
+
+    <div id="chunk-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title"></h3>
+            <p id="modal-content"></p>
+            <div class="modal-buttons">
+                <button id="mark-reviewed-btn">Marcar como Revisado</button>
+                <button id="close-modal-btn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Estado da Aplicação (Simula o Banco de Dados) ---
+        let currentTopicData = null;
+
+        // --- Seletores de Elementos do DOM ---
+        const creationSection = document.getElementById('creation-section');
+        const processingFeedback = document.getElementById('processing-feedback');
+        const topicView = document.getElementById('topic-view');
+        const topicForm = document.getElementById('topic-form');
+        const topicTitle = document.getElementById('topic-title');
+        const activityPanel = document.getElementById('activity-panel');
+        const chunkModal = document.getElementById('chunk-modal');
+
+        // --- FUNÇÕES DE LÓGICA (SIMULANDO O BACKEND) ---
+
+        /**
+         * RN-01: Simula a modularização do conteúdo pela IA.
+         * Neste protótipo, apenas dividimos o texto por parágrafos.
+         */
+        function simulateAIChunking(description) {
+            return description
+                .trim()
+                .split(/\n\s*\n/) // Divide por linhas em branco (parágrafos)
+                .filter(p => p.trim() !== '')
+                .map((content, index) => ({
+                    id: `chunk-${index}-${Date.now()}`,
+                    title: `Módulo ${index + 1}`,
+                    content: content.trim(),
+                    status: 'not_started' // RN-02: Estado inicial
+                }));
+        }
+        
+        /**
+         * Simula a criação de um tópico, incluindo a latência da IA.
+         */
+        function handleTopicCreation(name, description) {
+            creationSection.classList.add('hidden');
+            processingFeedback.classList.remove('hidden');
+
+            // RNF-01: Simula o processamento assíncrono com um atraso de 2.5 segundos
+            setTimeout(() => {
+                const chunks = simulateAIChunking(description);
+                currentTopicData = {
+                    name: name,
+                    chunks: chunks
+                };
+
+                processingFeedback.classList.add('hidden');
+                displayTopicView();
+            }, 2500);
+        }
+
+        /**
+         * RF-F07 (parcial): Renderiza a visualização do tópico e o painel.
+         */
+        function displayTopicView() {
+            topicTitle.textContent = currentTopicData.name;
+            activityPanel.innerHTML = ''; // Limpa o painel anterior
+
+            currentTopicData.chunks.forEach(chunk => {
+                const cell = document.createElement('div');
+                cell.className = `chunk-cell status-${chunk.status}`;
+                cell.dataset.chunkId = chunk.id;
+                cell.title = `${chunk.title} - Status: ${chunk.status.replace('_', ' ')}`;
+                
+                // RF-F04: Célula clicável
+                cell.addEventListener('click', () => showChunkModal(chunk.id));
+                activityPanel.appendChild(cell);
+            });
+            
+            topicView.classList.remove('hidden');
+        }
+
+        /**
+         * RF-F05: Mostra o modal com o conteúdo do chunk.
+         */
+        function showChunkModal(chunkId) {
+            const chunk = currentTopicData.chunks.find(c => c.id === chunkId);
+            if (!chunk) return;
+
+            document.getElementById('modal-title').textContent = chunk.title;
+            document.getElementById('modal-content').textContent = chunk.content;
+            
+            // Reatribui o evento para garantir que o chunkId correto seja usado
+            document.getElementById('mark-reviewed-btn').onclick = () => updateUserProgress(chunkId);
+
+            chunkModal.classList.add('visible');
+        }
+
+        function hideChunkModal() {
+            chunkModal.classList.remove('visible');
+        }
+
+        /**
+         * RF-F06: Atualiza o progresso do usuário em um chunk.
+         */
+        function updateUserProgress(chunkId) {
+            const chunk = currentTopicData.chunks.find(c => c.id === chunkId);
+            if (!chunk) return;
+            
+            // RN-02: Lógica de progressão de status
+            const statusOrder = ['not_started', 'reviewed_once', 'reviewed_multiple', 'mastered'];
+            const currentIndex = statusOrder.indexOf(chunk.status);
+            const nextIndex = Math.min(currentIndex + 1, statusOrder.length - 1);
+            chunk.status = statusOrder[nextIndex];
+
+            // RF-F07: Atualiza a cor da célula dinamicamente
+            const cell = activityPanel.querySelector(`[data-chunk-id="${chunkId}"]`);
+            if (cell) {
+                cell.className = `chunk-cell status-${chunk.status}`;
+                cell.title = `${chunk.title} - Status: ${chunk.status.replace('_', ' ')}`;
+            }
+            
+            hideChunkModal();
+        }
+
+        // --- EVENT LISTENERS ---
+
+        topicForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('topic-name').value;
+            const description = document.getElementById('topic-description').value;
+            handleTopicCreation(name, description);
+        });
+
+        document.getElementById('close-modal-btn').addEventListener('click', hideChunkModal);
+        
+        // Clicar fora do modal também fecha
+        chunkModal.addEventListener('click', (e) => {
+            if (e.target === chunkModal) {
+                hideChunkModal();
+            }
+        });
+
+        document.getElementById('back-to-creation').addEventListener('click', () => {
+            topicView.classList.add('hidden');
+            creationSection.classList.remove('hidden');
+            topicForm.reset(); // Limpa o formulário
+            currentTopicData = null;
+        });
+
+    </script>
+</body>
+</html>
