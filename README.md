@@ -1,7 +1,3 @@
-Excelente. Com essa direção clara, podemos construir um esqueleto de documentação muito mais robusto, formal e alinhado à sua visão. A abordagem de usar um LLM para a lógica central e focar na experiência de visualização é moderna e tem grande potencial acadêmico e prático.
-
-A seguir, apresento um esqueleto de documentação de projeto. Ele está estruturado para ser preenchido, servindo como um guia formal para o desenvolvimento. Os pontos marcados com `[A ser definido]` são sugestões ou locais para você detalhar com suas próprias escolhas técnicas.
-
 -----
 
 ### **Documentação de Projeto: Sistema de Aprendizagem Modular via LLM**
