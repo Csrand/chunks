@@ -232,15 +232,5 @@ O sistema "Chunks" adota uma arquitetura **cliente-servidor desacoplada**, com u
 - **Async HTTP Client** — `httpx` para chamadas à DeepSeek
 - **Tarefas Assíncronas** — `BackgroundTasks` (simples) ou `Celery` (escalável)
 
-### Estados da Criação de Tópico
-
-| Estado        | Descrição |
-|---------------|-----------|
-| `processing`  | Tópico está sendo analisado pela IA |
-| `ready`       | Chunks gerados com sucesso |
-| `error`       | Erro ao processar (JSON inválido, falha na API, etc) |
-| `failed`      | Falha técnica persistente (ex: retries excedidos) |
-
----
 
 
