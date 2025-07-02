@@ -117,6 +117,8 @@ Os requisitos não-funcionais definem os atributos de qualidade e restrições t
       * O quadrado correspondente no Painel de Atividade muda de cor, refletindo o novo status (ex: de cinza para verde claro), fornecendo feedback visual imediato.
 
 -----
+![image](https://github.com/user-attachments/assets/3ec3d2d9-1ea7-4aa3-8614-bc18a22d3b6e)
+
 
 #### **4. Arquitetura da Solução**
 
@@ -198,6 +200,7 @@ O sistema "Chunks" adota uma arquitetura **cliente-servidor desacoplada**, com u
 | `DELETE` | `/topics/{topic_id}`         | Exclui um tópico (e seus chunks) |
 | `POST` | `/chunks/{chunk_id}/progress`  | Atualiza progresso de um chunk |
 
+
 ### 🗃 Modelo de Dados
 
 - Tabelas:
@@ -208,6 +211,10 @@ O sistema "Chunks" adota uma arquitetura **cliente-servidor desacoplada**, com u
 - Campos importantes:
   - `status` do Tópico: `processing`, `ready`, `error`, `failed`
   - `error_message`: campo texto para explicar falhas de processamento
+
+![image](https://github.com/user-attachments/assets/7a4c7422-298a-47ed-96e3-1f37ce408100)
+![image](https://github.com/user-attachments/assets/f5f90bd8-b865-45d5-88c8-a643d684e77c)
+
 
 ### Segurança
 
