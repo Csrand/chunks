@@ -2,8 +2,6 @@
 
 ### ** 'Chunks': Sistema de Aprendizagem Modular via LLM**
 
-**Autor:** [Chrystian Andrade]
-
 -----
 
 #### **1. Visão Geral e Justificativa**
