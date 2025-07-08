@@ -29,71 +29,43 @@ Esta seção define o escopo do produto sob a filosofia de ser **minimalista e p
 
 Os requisitos funcionais descrevem as capacidades que o sistema *deve* executar.
 
-**Backend (API Service):**
-* **RF-B01:** A API deve prover um endpoint seguro para receber a submissão de um novo `Tópico` (nome e descrição textual).
-  **Entrada esperada:** JSON com `name: string` e `description: string`
-  - **Resposta imediata:** `202 Accepted` com um ID de tópico e status `"processing"`
-  - **Ação subsequente:** O backend inicia uma *task assíncrona* para enviar o texto à DeepSeek API.
-* **RF-B02:** A API deve ser capaz de construir um prompt estruturado e se comunicar com a API externa da DeepSeek, enviando a descrição do tópico para processamento.
-  - **Prompt:** Deve forçar o modelo a:
-  - Responder **exclusivamente** com JSON
-  - Não incluir explicações, comentários ou textos fora do JSON
-* **RF-B03:** A API deve ser capaz de validar e parsear a resposta JSON retornada pela DeepSeek para extrair a lista de `Chunks`.
+RF-01: Criação de Tópicos de Estudo: O usuário deve ser capaz de criar um novo tópico de estudo fornecendo um nome (título) e uma descrição (o conteúdo textual completo a ser estudado).
 
-- **Validações esperadas:**
-  - A resposta deve ser JSON válido
-  - Deve conter a chave `"chunks"`
-  - Cada chunk deve conter `title` e `content` não vazios
+RF-02: Processamento Automático do Conteúdo: Após a criação de um tópico, o sistema deve analisar a descrição fornecida e dividi-la automaticamente em múltiplos "módulos de estudo" menores e autocontidos.
 
-  | Situação de erro | Ação |
-  |------------------|------|
-  | Resposta não é JSON | Marcar tópico como `error`, registrar mensagem |
-  | JSON sem `chunks` | Marcar como `error` |
-  | Chunks inválidos ou vazios | Marcar como `error` |
-  | API falha (timeout, etc) | Retry N vezes → depois `failed` |
+RF-03: Feedback sobre o Processamento: Durante a análise e criação dos módulos, o usuário deve ver um status indicando que o tópico está "em processamento".
 
-* **RF-B04:** A API deve persistir as entidades `Tópico` e seus `Chunks` correspondentes no banco de dados SQL.
-O tópico só é salvo **após a resposta ser validada**
-  - Status no banco:
-    - `processing` → `ready` (sucesso)
-    - `processing` → `error` / `failed` (erro)
-  - Erros devem ser **logados** (banco ou sistema externo)
-* **RF-B05:** A API deve prover um endpoint para consultar todos os dados de um `Tópico` específico, incluindo a lista de `Chunks` e o progresso do usuário associado a cada um.
-* **RF-B06:** A API deve prover um endpoint para que o frontend possa registrar ou atualizar o status de progresso de um usuário em um `Chunk` específico.
-**Frontend (Aplicação Cliente):**
-* **RF-F01:** A interface deve apresentar um formulário claro para que o usuário possa criar um novo `Tópico`, inserindo seu nome e a descrição.
-* **RF-F02:** A interface deve exibir uma tela principal (dashboard) que lista todos os `Tópicos` criados pelo usuário.
-* **RF-F03:** Ao selecionar um `Tópico`, a interface deve renderizar o `Painel de Atividade`, exibindo uma grade onde cada célula representa um `Chunk`.
-* **RF-F04:** Cada célula (representando um `Chunk`) no `Painel de Atividade` deve ser um elemento interativo (clicável).
-* **RF-F05:** O clique em uma célula deve acionar a exibição do conteúdo do `Chunk` correspondente (ex: em um modal ou painel lateral).
+RF-04: Tratamento de Falhas no Processamento: Se o sistema não conseguir dividir o conteúdo em módulos, o tópico deve ser marcado com um status de "erro", informando o usuário sobre a falha.
 
-* **RF-F06:** A interface de visualização do `Chunk` deve conter um mecanismo explícito para o usuário registrar seu progresso (alterar a cor do Chunk a cada (n) interação do usuário).
-* **RF-F07:** A cor da célula no `Painel de Atividade` deve ser atualizada dinamicamente, sem a necessidade de recarregar a página, sempre que o progresso do `Chunk` correspondente for alterado.
+RF-05: Visualização do Painel de Tópicos: O usuário deve ter acesso a um painel principal que lista todos os tópicos de estudo que ele criou.
 
-**3.2. Regras de Negócio (RN)**
+2. Visualização e Aprendizagem
+RF-06: Acesso ao Painel de Progresso: Ao selecionar um tópico, o usuário deve ser direcionado a um "Painel de Progresso", que exibe todos os módulos de estudo daquele tópico em um formato de grade.
 
-As regras de negócio são políticas e restrições que governam a lógica do sistema.
+RF-07: Interação com Módulos de Estudo: Cada célula na grade do Painel de Progresso representa um módulo de estudo e deve ser interativa (clicável).
 
-* **RN-01 (Delegação de IA):** A lógica de criação e segmentação de `Chunks` é de responsabilidade exclusiva e total da API externa da DeepSeek. O backend atua como um orquestrador e não contém lógica própria de Processamento de Linguagem Natural. O backend não tenta corrigir respostas inválidos
-da IA, ele apenas rejeita e registra o erro.
-* **RN-02 (Modelo de Progressão):** O progresso de um usuário em um `Chunk` segue um ciclo de vida predefinido que impacta diretamente a visualização. Os estados são:
-    * `not_started` (Cor: Cinza) - Estado inicial.
-    * `reviewed_once` (Cor: Verde Claro) - Após a primeira interação de revisão.
-    * `reviewed_multiple` (Cor: Verde Médio) - Após a segunda ou terceira interação.
-    * `mastered` (Cor: Verde Escuro) - Após N interações ou uma ação explícita do usuário.
-* **RN-03 (Imutabilidade de Conteúdo):** Para manter a simplicidade do MVP (Produto Mínimo Viável), um `Tópico` ou `Chunk`, uma vez criado, não poderá ser editado. A única ação permitida será a exclusão do `Tópico` como um todo.
-* **RN-04 (Isolamento de Dados - *Tenancy*):** Os `Tópicos` e todo o progresso associado são estritamente vinculados a um único usuário. Um usuário não pode, sob nenhuma circunstância, visualizar ou interagir com os dados de outro usuário.
-* **RN-05 (Contrato com a IA):** O prompt enviado à DeepSeek API deve obrigatoriamente instruir o modelo a retornar os dados em um formato JSON estrito e previsível, para garantir a robustez do parsing da resposta.
+RF-08: Consumo de Conteúdo: Ao clicar em uma célula, o conteúdo completo daquele módulo de estudo deve ser exibido para que o usuário possa estudá-lo.
 
-**3.3. Requisitos Não-Funcionais (RNF)**
+RF-09: Registro de Progresso: Dentro da visualização de um módulo, o usuário deve ter uma ação clara para registrar que revisou ou aprendeu o conteúdo.
 
-Os requisitos não-funcionais definem os atributos de qualidade e restrições técnicas do sistema.
+RF-10: Atualização Visual do Progresso: Sempre que o usuário registrar uma revisão, a cor da célula correspondente no Painel de Progresso deve ser atualizada instantaneamente para refletir o novo status.
 
-* **RNF-01 (Performance Percebida):** A criação de um novo `Tópico` deve ser uma operação assíncrona. A API deve retornar uma resposta de sucesso ao frontend imediatamente (`202 Accepted`), enquanto o processamento com a DeepSeek ocorre em background. O frontend deve exibir um estado de "processando" para o usuário.
-* **RNF-02 (Usabilidade Minimalista):** A interface deve ser livre de distrações. O design deve priorizar a clareza da informação e a centralidade do `Painel de Atividade` como ferramenta principal de interação.
-* **RNF-03 (Segurança):** Chaves de API para serviços externos (DeepSeek) devem ser gerenciadas de forma segura, utilizando variáveis de ambiente ou um serviço de gerenciamento de segredos, e nunca devem ser expostas no código-fonte ou no lado do cliente.
-* **RNF-04 (Dependência Externa):** A funcionalidade central do sistema é criticamente dependente da disponibilidade, latência e políticas de uso da DeepSeek API. O sistema deve ser resiliente a falhas temporárias da API externa, informando o usuário de forma clara quando o serviço estiver indisponível.
+3. Regras de Negócio
+RN-01: Modelo de Progressão de Aprendizado: O progresso do usuário em cada módulo de estudo deve seguir um ciclo de vida visualmente claro, refletido pelas cores no Painel de Progresso:
 
+Estado 1 (Não Iniciado): Cor padrão (ex: cinza).
+
+Estado 2 (Primeira Revisão): Cor indicando progresso inicial (ex: verde claro).
+
+Estado 3 (Múltiplas Revisões): Cor indicando reforço do conhecimento (ex: verde médio).
+
+Estado 4 (Maestria): Cor indicando que o conteúdo foi dominado (ex: verde escuro).
+
+RN-02: Privacidade e Isolamento de Dados: Todo o conteúdo e progresso de um usuário são estritamente privados e pessoais. Nenhum usuário pode ver ou interagir com os tópicos ou o progresso de outros usuários.
+
+RN-03: Imutabilidade do Conteúdo: Uma vez que um tópico e seus módulos de estudo são criados, o conteúdo textual não pode ser editado. A única alteração permitida é a exclusão do tópico como um todo.
+
+RN-04: Foco e Simplicidade da Interface: A interface do sistema deve ser minimalista e livre de distrações, priorizando a clareza das informações e a facilidade de interação com o Painel de Progresso.
 #### **3. Jornada do Usuário (User Flow)**
 
 1.  **Criação do Tópico:**
