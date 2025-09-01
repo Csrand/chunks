@@ -1,10 +1,10 @@
 -----
 
-### ** 'Chunks': Sistema de Aprendizagem Modular via LLM**
+###  'Chunks': Sistema de Aprendizagem Modular via LLM
 
 -----
 
-#### **1. Visão Geral e Justificativa**
+#### 1. Visão Geral e Justificativa
 
 Este documento detalha o projeto e a arquitetura de um sistema de aprendizagem inovador, cujo objetivo é transformar conteúdo textual denso em módulos de estudo interativos e visualmente gamificados. A principal inovação do sistema reside na sua arquitetura desacoplada, que delega a complexa tarefa de Processamento de Linguagem Natural (PLN) para uma API de um Modelo de Linguagem Grande (LLM) de ponta, a **DeepSeek API**.
 
