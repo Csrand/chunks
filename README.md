@@ -1,206 +1,344 @@
------
+# Chunks — Especificação de Requisitos de Software
+---
+> **Versão**: 1.3  
+> **Data**: 14 de Setembro de 2025  
+> **Autor**: [Csrand]  
+> **Projeto**: Material de apoio interativo para Fundamentos de Programação.
+---
 
-###  'Chunks': Sistema de Aprendizagem Modular via LLM
+## 1. Introdução
 
------
+### 1.1 Objetivo
 
-#### 1. Visão Geral e Justificativa
+Desenvolver um sistema web interativo como material de apoio para a disciplina **Fundamentos de Programação**, com:
 
-Este documento detalha o projeto e a arquitetura de um sistema de aprendizagem inovador, cujo objetivo é transformar conteúdo textual denso em módulos de estudo interativos e visualmente gamificados. A principal inovação do sistema reside na sua arquitetura desacoplada, que delega a complexa tarefa de Processamento de Linguagem Natural (PLN) para uma API de um Modelo de Linguagem Grande (LLM) de ponta, a **DeepSeek API**.
-
-O sistema se diferencia ao focar na experiência do usuário, apresentando o progresso de aprendizado através de uma interface inspirada no painel de atividades do GitHub, promovendo o engajamento e a motivação através de feedback visual claro e contínuo.
-
------
-
-#### **2. Conceitos Fundamentais**
-
-Para a clareza deste documento, os seguintes termos são definidos:
-
-  * **Tópico:** A unidade de estudo principal, criada pelo usuário. É definida por um **Nome** e uma **Descrição** textual. A descrição é o conteúdo bruto que será enviado à API externa para análise e modularização.
-  * **Chunk:** A unidade de aprendizado atômica. São blocos de informação menores, gerados pela DeepSeek API a partir da descrição do Tópico. Cada chunk é autocontido e projetado para ser consumido em uma única sessão de estudo. Os chunks de um mesmo tópico podem ser explorados livremente, sem uma ordem predefinida.
-  * **Painel de Atividade:** A representação visual do progresso do usuário dentro de um Tópico. Consiste em uma grade de quadrados, onde cada quadrado representa um único **Chunk**. A cor de cada quadrado evolui dinamicamente para refletir o nível de maestria do usuário sobre aquele chunk específico.
-
------
-#### **3. Requisitos e Regras
-
-Esta seção define o escopo do produto sob a filosofia de ser **minimalista e poderoso**. O objetivo é construir um núcleo funcional robusto, evitando funcionalidades secundárias na versão inicial.
-
-**3.1. Requisitos Funcionais (RF)**
-
-Os requisitos funcionais descrevem as capacidades que o sistema *deve* executar.
-
-RF-01: Criação de Tópicos de Estudo: O usuário deve ser capaz de criar um novo tópico de estudo fornecendo um nome (título) e uma descrição (o conteúdo textual completo a ser estudado).
-
-RF-02: Processamento Automático do Conteúdo: Após a criação de um tópico, o sistema deve analisar a descrição fornecida e dividi-la automaticamente em múltiplos "módulos de estudo" menores e autocontidos.
-
-RF-03: Feedback sobre o Processamento: Durante a análise e criação dos módulos, o usuário deve ver um status indicando que o tópico está "em processamento".
-
-RF-04: Tratamento de Falhas no Processamento: Se o sistema não conseguir dividir o conteúdo em módulos, o tópico deve ser marcado com um status de "erro", informando o usuário sobre a falha.
-
-RF-05: Visualização do Painel de Tópicos: O usuário deve ter acesso a um painel principal que lista todos os tópicos de estudo que ele criou.
-
-2. Visualização e Aprendizagem
-RF-06: Acesso ao Painel de Progresso: Ao selecionar um tópico, o usuário deve ser direcionado a um "Painel de Progresso", que exibe todos os módulos de estudo daquele tópico em um formato de grade.
-
-RF-07: Interação com Módulos de Estudo: Cada célula na grade do Painel de Progresso representa um módulo de estudo e deve ser interativa (clicável).
-
-RF-08: Consumo de Conteúdo: Ao clicar em uma célula, o conteúdo completo daquele módulo de estudo deve ser exibido para que o usuário possa estudá-lo.
-
-RF-09: Registro de Progresso: Dentro da visualização de um módulo, o usuário deve ter uma ação clara para registrar que revisou ou aprendeu o conteúdo.
-
-RF-10: Atualização Visual do Progresso: Sempre que o usuário registrar uma revisão, a cor da célula correspondente no Painel de Progresso deve ser atualizada instantaneamente para refletir o novo status.
-
-3. Regras de Negócio
-RN-01: Modelo de Progressão de Aprendizado: O progresso do usuário em cada módulo de estudo deve seguir um ciclo de vida visualmente claro, refletido pelas cores no Painel de Progresso:
-
-Estado 1 (Não Iniciado): Cor padrão (ex: cinza).
-
-Estado 2 (Primeira Revisão): Cor indicando progresso inicial (ex: verde claro).
-
-Estado 3 (Múltiplas Revisões): Cor indicando reforço do conhecimento (ex: verde médio).
-
-Estado 4 (Maestria): Cor indicando que o conteúdo foi dominado (ex: verde escuro).
-
-RN-02: Privacidade e Isolamento de Dados: Todo o conteúdo e progresso de um usuário são estritamente privados e pessoais. Nenhum usuário pode ver ou interagir com os tópicos ou o progresso de outros usuários.
-
-RN-03: Imutabilidade do Conteúdo: Uma vez que um tópico e seus módulos de estudo são criados, o conteúdo textual não pode ser editado. A única alteração permitida é a exclusão do tópico como um todo.
-
-RN-04: Foco e Simplicidade da Interface: A interface do sistema deve ser minimalista e livre de distrações, priorizando a clareza das informações e a facilidade de interação com o Painel de Progresso.
-#### **3. Jornada do Usuário (User Flow)**
-
-1.  **Criação do Tópico:**
-
-      * O usuário acessa a tela principal e clica no botão "Criar Tópico".
-      * Ele é direcionado para uma página de criação, onde insere um **Nome** para o tópico (ex: "História da Computação") e uma **Descrição** (um texto longo sobre o assunto).
-      * Ao submeter, o sistema envia a Descrição para a DeepSeek API e aguarda a geração dos Chunks.
-
-2.  **Visualização e Interação:**
-
-      * Após o processamento, o usuário é levado à página do Tópico recém-criado.
-      * A tela exibe o **Painel de Atividade**: uma grade de quadrados cinzas, cada um representando um chunk gerado.
-      * Ao clicar em um quadrado, um modal ou painel lateral se abre, exibindo o conteúdo daquele Chunk para estudo.
-
-3.  **Registro de Progresso:**
-
-      * Após estudar o Chunk, o usuário realiza uma ação para indicar seu progresso (ex: clica em um botão "Revisei" ou "Entendi").
-      * O sistema registra essa interação no banco de dados.
-      * O quadrado correspondente no Painel de Atividade muda de cor, refletindo o novo status (ex: de cinza para verde claro), fornecendo feedback visual imediato.
-
------
-![image](https://github.com/user-attachments/assets/3ec3d2d9-1ea7-4aa3-8614-bc18a22d3b6e)
-
-
-#### **4. Arquitetura da Solução**
-
-# 🏛 Arquitetura do Sistema "Chunks"
+- Autenticação de usuário (login e registro)
+- Armazenamento persistente de dados do usuário
+- Conteúdos organizados hierarquicamente: **Disciplinas → Módulos → Submódulos**
+- Conceitos estruturados em **6 seções pré-definidas** por submódulo
+- Questionários com **5 perguntas objetivas** por submódulo
+- Revisões baseadas no **tempo de acesso (LAST_VIEWED)**
+- Progresso visual via **grid colorido e barra de progresso**
+- Gamificação com **badges** por desempenho
 
 ---
 
-## Visão Geral
+### 1.2 Escopo
 
-O sistema "Chunks" adota uma arquitetura **cliente-servidor desacoplada**, com uso estratégico de uma **API de IA externa (DeepSeek)** para modularização de conteúdo. O backend atua como **orquestrador**, mantendo controle da persistência, segurança e progressão do usuário. O frontend é responsivo e gamificado, inspirado na interface do GitHub Contributions Grid.
+- **MVP**: 1 disciplina, 1 módulo, 3 submódulos.
+- **Funcionalidades principais**:
+  - Autenticação de usuário
+  - Navegação hierárquica
+  - Estudo de conceitos + questionários
+  - Visualização de progresso
+  - Sugestão de revisão
+  - Conquista de badges
+- **Tecnologias**:
+  - Backend: NestJS
+  - Frontend: React
+  - Banco de Dados: **PostgreSQL** (local via Docker ou instalação nativa)
+- **Público-Alvo**: Alunos da disciplina *Fundamentos de Programação*
 
 ---
 
-## Componentes da Arquitetura
+### 1.3 Definições, Acrônimos e Abreviações
 
-```text
-+----------------------+     HTTPS      +------------------------+
-|                      |<==============>|                        |
-|     Frontend (Web)   |                |    Backend (FastAPI)   |
-|  Next.js + Tailwind  |                |  Python + PostgreSQL   |
-|                      |===============>|                        |
-+----------------------+    REST API    +------------------------+
-                                            ||
-                                            || HTTP POST
-                                            \/
-                                +------------------------+
-                                |                        |
-                                |    DeepSeek API (LLM)  |
-                                |  IA para segmentação   |
-                                +------------------------+
+| Termo           | Definição |
+|-----------------|-----------|
+| RF              | Requisito Funcional |
+| RNF             | Requisito Não-Funcional |
+| RN              | Regra de Negócio |
+| STRENGTH        | Métrica interna de retenção de conteúdo (0 a 5) |
+| LAST_VIEWED     | Timestamp do último acesso ao submódulo |
+| QUIZ_SCORE      | Número de acertos no questionário (0 a 5) |
+| MVP             | Minimum Viable Product |
+| JWT             | JSON Web Token (autenticação) |
+| bcrypt          | Algoritmo de hash para senhas |
+| PostgreSQL      | Sistema de gerenciamento de banco de dados relacional open-source adotado neste projeto |
+
+---
+
+### 1.4 Visão Geral do Sistema
+
+O sistema é composto por três camadas principais:
+
+- **Frontend (React)**: Interface interativa para o aluno.
+- **Backend (NestJS)**: Lógica de negócio, autenticação e API REST.
+- **Banco de Dados (PostgreSQL)**: Armazenamento persistente de usuários, conteúdos, progresso e badges.
+
+**Fluxo típico do usuário**:
+> Login → Escolhe disciplina → Seleciona módulo → Estuda submódulo (6 seções + quiz) → Visualiza progresso → Recebe sugestões de revisão → Conquista badges.
+
+---
+
+## 2. Requisitos Gerais
+
+### 2.1 Requisitos Funcionais
+
+| ID    | Descrição | Detalhes |
+|-------|-----------|----------|
+| RF01  | Autenticação de Usuário | Login/registro, validação de campos, hash de senha (bcrypt), geração de JWT. |
+| RF02  | Navegação Hierárquica | Disciplinas → Módulos → Submódulos (exibidos em grid). |
+| RF03  | Submódulos | Cada submódulo contém 6 seções de conteúdo + 1 questionário de 5 perguntas. |
+| RF04  | Armazenamento de Dados | Persistência de: usuários, disciplinas, módulos, submódulos, perguntas, respostas, progresso, badges. |
+| RF05  | Progresso Visual | Grid colorido conforme QUIZ_SCORE + barra de progresso global. |
+| RF06  | Revisão por Tempo de Acesso | Sistema sugere revisão de submódulos com LAST_VIEWED > 2 dias (intervalos: 2, 4, 7 dias). |
+| RF07  | Gamificação | Concessão de badge único por submódulo ao atingir QUIZ_SCORE = 5. |
+| RF08  | Acesso Irrestrito | Usuário autenticado pode acessar qualquer conceito ou questionário, independente da ordem. |
+
+---
+
+### 2.2 Requisitos Não-Funcionais
+
+| ID    | Descrição |
+|-------|-----------|
+| RNF01 | Interface intuitiva: qualquer funcionalidade acessível em ≤3 cliques. |
+| RNF02 | Configuração do PostgreSQL local concluída em <30min (via Docker ou script). |
+| RNF03 | Backend responde queries simples em <500ms. |
+| RNF04 | Frontend responsivo: suporte a telas de 320x480 até 1920x1080. |
+| RNF05 | Clean code: funções com <20 linhas, modularidade e baixo acoplamento. |
+| RNF06 | Cobertura de testes >80% (unitários com Jest, E2E com Cypress). |
+| RNF07 | Índices criados em colunas de busca frequente (ex: USER_ID, SUBMODULE_ID). |
+| RNF08 | Senhas armazenadas com hash bcrypt; senha mínima de 12 caracteres no registro. |
+
+---
+
+### 2.3 Regras de Negócio
+
+| ID    | Regra |
+|-------|-------|
+| RN01  | **Autenticação**: Username (4–50 chars), email válido e único, senha ≥8 caracteres. Bloqueio de conta após 5 tentativas falhas em 5 minutos (liberação após 15 min). |
+| RN02  | **Navegação**: Apenas usuários autenticados acessam módulos/submódulos. Grid exibe até 12 itens por página. |
+| RN03  | **Submódulos**: 6 seções obrigatórias. Questionário com 5 perguntas. QUIZ_SCORE varia de 0 a 5. |
+| RN04  | **Progresso**: QUIZ_SCORE atualiza o campo STRENGTH. LAST_VIEWED é atualizado sempre que o submódulo é acessado. |
+| RN05  | **Revisão**: Sistema sugere revisão nos dias 2, 4 e 7 após último acesso. Limite de 5 submódulos sugeridos por vez. |
+| RN06  | **Gamificação**: Badge concedido por submódulo, com nome único baseado em submódulo + data de conquista (ex: “Variáveis_20250915”). |
+
+---
+
+## 3. Modelo de Dados (PostgreSQL)
+
+### 3.1 Tabelas
+
+```sql
+Users (
+  USER_ID SERIAL PRIMARY KEY,
+  USERNAME VARCHAR(50) UNIQUE NOT NULL,
+  EMAIL VARCHAR(255) UNIQUE NOT NULL,
+  PASSWORD_HASH TEXT NOT NULL
+)
+
+Disciplines (
+  DISCIPLINE_ID SERIAL PRIMARY KEY,
+  NAME VARCHAR(100) NOT NULL,
+  DESCRIPTION TEXT
+)
+
+Modules (
+  MODULE_ID SERIAL PRIMARY KEY,
+  DISCIPLINE_ID INT REFERENCES Disciplines(DISCIPLINE_ID),
+  TITLE VARCHAR(100) NOT NULL,
+  DESCRIPTION TEXT
+)
+
+Submodules (
+  SUBMODULE_ID SERIAL PRIMARY KEY,
+  MODULE_ID INT REFERENCES Modules(MODULE_ID),
+  TITLE VARCHAR(100) NOT NULL,
+  EXPLANATION TEXT
+)
+
+Questions (
+  QUESTION_ID SERIAL PRIMARY KEY,
+  SUBMODULE_ID INT REFERENCES Submodules(SUBMODULE_ID),
+  QUESTION_TEXT TEXT NOT NULL,
+  OPTIONS JSONB NOT NULL, -- Ex: ["Opção A", "Opção B", ...]
+  CORRECT_ANSWER INT NOT NULL -- Índice da opção correta (0-based)
+)
+
+UserProgress (
+  PROGRESS_ID SERIAL PRIMARY KEY,
+  USER_ID INT REFERENCES Users(USER_ID),
+  SUBMODULE_ID INT REFERENCES Submodules(SUBMODULE_ID),
+  QUIZ_SCORE SMALLINT CHECK (QUIZ_SCORE BETWEEN 0 AND 5),
+  LAST_VIEWED TIMESTAMP DEFAULT NOW(),
+  STRENGTH SMALLINT CHECK (STRENGTH BETWEEN 0 AND 5)
+)
+
+Answers (
+  ANSWER_ID SERIAL PRIMARY KEY,
+  PROGRESS_ID INT REFERENCES UserProgress(PROGRESS_ID),
+  QUESTION_ID INT REFERENCES Questions(QUESTION_ID),
+  USER_ANSWER INT,
+  CORRECT BOOLEAN,
+  TIMESTAMP TIMESTAMP DEFAULT NOW()
+)
+
+Badges (
+  BADGE_ID SERIAL PRIMARY KEY,
+  USER_ID INT REFERENCES Users(USER_ID),
+  SUBMODULE_ID INT REFERENCES Submodules(SUBMODULE_ID),
+  NAME VARCHAR(100) UNIQUE NOT NULL, -- Ex: "Condicionais_20250914"
+  AWARDED_AT TIMESTAMP DEFAULT NOW()
+)
 ```
+
+### 3.2 Índices (PostgreSQL)
+
+```sql
+CREATE INDEX idx_users_username_email ON Users(USERNAME, EMAIL);
+CREATE INDEX idx_user_progress_lookup ON UserProgress(USER_ID, SUBMODULE_ID);
+CREATE INDEX idx_answers_by_progress ON Answers(PROGRESS_ID, QUESTION_ID);
 ```
-```
+
+---
+
+## 4. Arquitetura do Sistema
+
+### 4.1 Backend (NestJS + PostgreSQL)
+
+- **Módulos principais**:
+  - `AuthModule`: login, registro, JWT
+  - `ContentModule`: disciplinas, módulos, submódulos, questões
+  - `ProgressModule`: progresso, revisões, badges
+- **Endpoints principais**:
+  - `POST /auth/login`
+  - `POST /auth/register`
+  - `GET /disciplines`
+  - `GET /modules/:id`
+  - `GET /submodules/:id`
+  - `POST /submit-answers`
+  - `GET /progress/:userId`
+  - `GET /review/:userId`
+  - `GET /badges/:userId`
+- **TypeORM**: Configurado para PostgreSQL, com migrations via CLI.
+- **Variáveis de ambiente**:
+  ```env
+  DATABASE_URL=postgres://user:pass@localhost:5432/chunks_db
+  JWT_SECRET=your_strong_secret_here
+  ```
+
+---
+
+### 4.2 Frontend (React)
+
+- **Rotas principais**:
+  - `/login`
+  - `/register`
+  - `/disciplines`
+  - `/discipline/:id/modules`
+  - `/module/:id/submodules`
+  - `/submodule/:id/study`
+- **Componentes principais**:
+  - `LoginForm`, `RegisterForm`
+  - `DisciplineList`, `ModuleList`, `SubmoduleGrid`
+  - `SubmoduleStudy` (6 seções + quiz)
+  - `ProgressBar`, `BadgeCard`
+- **Estilização**:
+  - Layout com CSS Grid
+  - Componentes com Material-UI
+  - Gráficos com Recharts (opcional para progresso)
+
+---
+
+### 4.3 Banco de Dados
+
+- **SGBD**: PostgreSQL (versão 14+ recomendada)
+- **Deploy local**: via Docker (`docker-compose.yml`) ou instalação nativa
+- **Migrations**: Gerenciadas via TypeORM CLI
+- **Queries críticas otimizadas**:
+  - Login (por username/email)
+  - Cálculo de progresso por usuário
+  - Sugestão de revisão (filtro por LAST_VIEWED)
+  - Verificação de badges conquistadas
+
+---
+
+## 5. Fluxo do Usuário
+
+1. **Login ou Registro** → Autenticação JWT
+2. **Tela Inicial** → Lista de Disciplinas
+3. **Seleção de Disciplina** → Lista de Módulos
+4. **Seleção de Módulo** → Grid de Submódulos
+5. **Acesso a Submódulo**:
+   - Estudo das 6 seções de conteúdo
+   - Resolução do questionário (5 perguntas)
+6. **Feedback Imediato**:
+   - Atualização de QUIZ_SCORE e STRENGTH
+   - Badge concedida se QUIZ_SCORE = 5
+   - LAST_VIEWED atualizado
+7. **Dashboard de Progresso**:
+   - Grid colorido por desempenho
+   - Barra de progresso global
+8. **Revisão Inteligente**:
+   - Submódulos sugeridos com base em LAST_VIEWED (>2 dias)
+9. **Gamificação**:
+   - Visualização de badges conquistadas
+
+---
+
+## 6. Conteúdo do MVP
+
+- **Disciplina**: Fundamentos de Programação
+- **Módulo**: Programação Básica
+- **Submódulos**:
+  1. Variáveis
+  2. Condicionais
+  3. Loops
+- **Cada submódulo contém**:
+  - 6 seções de conteúdo (placeholders no MVP)
+  - 5 perguntas objetivas (placeholders no MVP)
+
+---
+
+## 7. Cronograma
+
+| Sprint | Dias   | Tarefas |
+|--------|--------|---------|
+| 1      | 1–7    | Conteúdo inicial, configurar PostgreSQL, backend (Auth, Content, Progress) |
+| 2      | 8–14   | Frontend (login, grid, formulários), integração, testes, documentação final |
+
+---
+
+## 8. Testes
+
+### 8.1 Unitários (Jest)
+
+- `POST /auth/login` → Valida credenciais, gera JWT
+- `POST /submit-answers` → Calcula QUIZ_SCORE, atualiza STRENGTH e LAST_VIEWED
+- `GET /review/:userId` → Retorna submódulos com LAST_VIEWED > 2 dias
+
+### 8.2 End-to-End (Cypress)
+
+- Fluxo completo de login e registro
+- Navegação entre disciplinas, módulos e submódulos
+- Resolução de questionário e verificação de badge
+- Verificação da lista de revisões sugeridas
+
+---
+
+## 9. Riscos e Mitigações
+
+| Risco                          | Mitigação |
+|--------------------------------|-----------|
+| Criação de conteúdo demorada   | Começar com 1 submódulo e expandir |
+| Queries lentas no PostgreSQL   | Uso de índices adequados, evitar SELECT *, monitorar com EXPLAIN ANALYZE |
+| Integração NestJS/React falha  | Testar endpoints com Postman/Thunder Client antes da integração |
+| Falhas em login/autenticação   | Usar bibliotecas consolidadas (passport-jwt, bcrypt) e validar JWT rigorosamente |
+| Curva de aprendizado do PostgreSQL | Utilizar Docker + GUI (ex: pgAdmin, DBeaver) para facilitar |
+
+---
+
+## 10. Referências
+- Documentação NestJS + TypeORM + PostgreSQL
+- React Router, Material-UI, Recharts
+- Cypress, Jest
+
+---
 
 
+Você pode salvar este arquivo como `SRS_Chunks_v1.3.md` e gerar PDF com ferramentas como **Pandoc** ou **Markdown Preview Enhanced (VS Code)**.
 
-## Backend (FastAPI + PostgreSQL)
+Precisa de versão em PDF, diagramas (UML, fluxo), ou modelo de tabela pronto para PostgreSQL? É só pedir!
 
-### Responsabilidades
-
-- **Expor uma API REST segura para o frontend**
-  - Endpoints protegidos por autenticação (JWT)
-  - Respostas consistentes e versionadas
-
-- **Orquestrar a comunicação com a DeepSeek API**
-  - Construção de prompt estruturado
-  - Envio via HTTP POST com chave de API
-  - Validação rigorosa da resposta JSON
-  - Fallbacks em caso de erro (retries, marcação como `error`, logs)
-
-- **Persistir entidades**
-  - Usuários, Tópicos, Chunks, Progresso
-  - Uso de UUIDs como identificadores
-  - Relacionamentos claros entre as entidades
-  - Enum para status de progresso (`not_started`, etc)
-
-- **Gerenciar tarefas assíncronas**
-  - Enfileirar e executar a chamada à DeepSeek em background
-  - Atualizar status do Tópico ao final (`ready`, `error`, etc)
-  - Exemplo de libs: `BackgroundTasks`, `Celery`, ou `dramatiq`
-
-- **Garantir isolamento de dados (multi-tenancy)**
-  - Cada recurso pertence a um `user_id`
-  - Nenhum dado pode ser acessado por outro usuário
-  - Filtros aplicados em todas as queries e endpoints
-
-- **Expor estado e erros ao frontend**
-  - Campos como `status` e `error_message` na entidade `Topic`
-  - Endpoints de leitura retornam estado atual e mensagem amigável
-  - Permite ao frontend renderizar corretamente as mensagens para o usuário
-
-### Endpoints REST esperados
-
-| Método | Endpoint                       | Ação |
-|--------|--------------------------------|------|
-| `POST` | `/topics`                      | Cria um novo tópico (resposta: 202 Accepted) |
-| `GET`  | `/topics/{topic_id}`           | Consulta chunks e progresso de um tópico |
-| `GET`  | `/users/me/topics`             | Lista os tópicos do usuário autenticado |
-| `DELETE` | `/topics/{topic_id}`         | Exclui um tópico (e seus chunks) |
-| `POST` | `/chunks/{chunk_id}/progress`  | Atualiza progresso de um chunk |
-
-
-### 🗃 Modelo de Dados
-
-- Tabelas:
-  - `Users` — Autenticação e controle de acesso
-  - `Topics` — Nome, descrição, status, user_id
-  - `Chunks` — Título, conteúdo, ordem, pertence a um tópico
-  - `ChunkProgress` — user_id + chunk_id + status + timestamp
-- Campos importantes:
-  - `status` do Tópico: `processing`, `ready`, `error`, `failed`
-  - `error_message`: campo texto para explicar falhas de processamento
-
-![image](https://github.com/user-attachments/assets/7a4c7422-298a-47ed-96e3-1f37ce408100)
-![image](https://github.com/user-attachments/assets/f5f90bd8-b865-45d5-88c8-a643d684e77c)
-
-
-### Segurança
-
-- JWT para autenticação
-- Verificação de `user_id` em todas as operações
-- Sanitização e validação de entrada com `pydantic`
-- Chave da DeepSeek mantida em `.env` (nunca exposta)
-
-### 🛠 Bibliotecas e Ferramentas Sugeridas
-
-- **FastAPI** — API moderna, rápida e tipada
-- **Pydantic** — Validação e serialização de dados
-- **SQLModel** ou **SQLAlchemy** — ORM relacional
-- **PostgreSQL** — Banco de dados relacional
-- **Async HTTP Client** — `httpx` para chamadas à DeepSeek
-- **Tarefas Assíncronas** — `BackgroundTasks` (simples) ou `Celery` (escalável)
-
-
-
+Parabéns — excelente trabalho! 🎉
