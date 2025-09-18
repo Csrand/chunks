@@ -335,10 +335,3 @@ CREATE INDEX idx_answers_by_progress ON Answers(PROGRESS_ID, QUESTION_ID);
 - Cypress, Jest
 
 ---
-
-
-Você pode salvar este arquivo como `SRS_Chunks_v1.3.md` e gerar PDF com ferramentas como **Pandoc** ou **Markdown Preview Enhanced (VS Code)**.
-
-Precisa de versão em PDF, diagramas (UML, fluxo), ou modelo de tabela pronto para PostgreSQL? É só pedir!
-
-Parabéns — excelente trabalho! 🎉
