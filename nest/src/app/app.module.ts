@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
+import { DisciplineModule } from 'src/discipline/discipline.module';
 
 const oracledb = require('oracledb');
 oracledb.initOracleClient({
@@ -42,7 +42,7 @@ oracledb.initOracleClient({
         logging: ['query', 'error'],
       })
     }),
-    UsersModule,
+    DisciplineModule,
     ],
   controllers: [AppController],
   providers: [AppService],
