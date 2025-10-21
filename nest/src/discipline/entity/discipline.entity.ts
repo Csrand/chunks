@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../commons/entity/base.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('DISCIPLINES')
+@Entity('BD2_DISCIPLINES')
 export class Discipline extends BaseEntity {
   @PrimaryGeneratedColumn('increment', {
     name: 'DISCIPLINE_ID',
@@ -12,14 +12,14 @@ export class Discipline extends BaseEntity {
   @Column({
     name: 'NAME',
     type: 'varchar2',
-    length: 20,
+    length: 100,
   })
   name?: string = '';
 
   @Column({
     name: 'DESCRIPTION',
     type: 'varchar2',
-    length: 70,
+    length: 250,
   })
   description?: string = '';
 

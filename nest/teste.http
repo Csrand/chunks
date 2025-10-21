@@ -1,0 +1,34 @@
+### Criar disciplina
+POST http://localhost:8000/rest/sistema/discipline/criar
+Content-Type: application/json
+
+{
+  "name": "Matemática",
+  "description": "Disciplina de matemática"
+}
+
+###
+
+### Listar todas disciplinas
+GET http://localhost:8000/rest/sistema/discipline/listar
+
+###
+
+### Buscar disciplina por ID
+GET http://localhost:8000/rest/sistema/discipline/buscar/1
+
+###
+
+### Atualizar disciplina
+PUT http://localhost:8000/rest/sistema/discipline/alterar/1
+Content-Type: application/json
+
+{
+  "name": "Física",
+  "description": "Disciplina de física"
+}
+
+###
+
+### Remover disciplina
+DELETE http://localhost:8000/rest/sistema/discipline/excluir/1
