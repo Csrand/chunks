@@ -13,7 +13,7 @@ export class DisciplineServiceRemove {
   ) {}
 
   async remove(disciplineID: number): Promise<void> {
-    const discipline = await this.service.findById(disciplineID);
+    const discipline = await this.service.findOne(disciplineID);
 
     if (!discipline?.disciplineID) {
       throw new HttpException('Disciplina não cadastrada', HttpStatus.NOT_FOUND);
@@ -23,7 +23,7 @@ export class DisciplineServiceRemove {
       .createQueryBuilder('discipline')
       .delete()
       .from(Discipline)
-      .where('discipline.DISCIPLINE_ID =:disciplineID ', {
+      .where('DISCIPLINE_ID =:disciplineID ', {
         disciplineID: discipline?.disciplineID,
       })
       .execute();
