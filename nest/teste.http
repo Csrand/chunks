@@ -15,12 +15,12 @@ GET http://localhost:8000/rest/sistema/discipline/listar
 ###
 
 ### Buscar disciplina por ID
-GET http://localhost:8000/rest/sistema/discipline/buscar/1
+GET http://localhost:8000/rest/sistema/discipline/buscar/23
 
 ###
 
 ### Atualizar disciplina
-PUT http://localhost:8000/rest/sistema/discipline/alterar/1
+PUT http://localhost:8000/rest/sistema/discipline/alterar/23
 Content-Type: application/json
 
 {
@@ -31,4 +31,4 @@ Content-Type: application/json
 ###
 
 ### Remover disciplina
-DELETE http://localhost:8000/rest/sistema/discipline/excluir/1
+DELETE http://localhost:8000/rest/sistema/discipline/excluir/23

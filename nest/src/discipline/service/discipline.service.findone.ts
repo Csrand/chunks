@@ -12,8 +12,8 @@ export class DisciplineServiceFindOne {
     private disciplineRepository: Repository<Discipline>,
   ) {}
 
-  async findOne(idDiscipline: number): Promise<DisciplineResponse> {
-    const discipline = await this.findById(idDiscipline);
+  async findOne(disciplineID: number): Promise<DisciplineResponse> {
+    const discipline = await this.findById(disciplineID);
 
     if (!discipline) {
       throw new HttpException('Discipline não cadastrada', HttpStatus.NOT_FOUND);
@@ -22,10 +22,10 @@ export class DisciplineServiceFindOne {
     return ConverterDiscipline.toDisciplineResponse(discipline);
   }
 
-  async findById(idDiscipline: number): Promise<Discipline | null> {
+  async findById(disciplineID: number): Promise<Discipline | null> {
     const discipline = await this.disciplineRepository
       .createQueryBuilder('discipline')
-      .where('discipline.ID_DISCIPLINE = :idDiscipline', { idDiscipline: idDiscipline })
+      .where('discipline.DISCIPLINE_ID = :disciplineID', { disciplineID: disciplineID })
       .getOne();
 
     return discipline;

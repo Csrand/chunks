@@ -23,7 +23,7 @@ export class DisciplineServiceRemove {
       .createQueryBuilder('discipline')
       .delete()
       .from(Discipline)
-      .where('discipline.ID_DISCIPLINE =:disciplineID ', {
+      .where('discipline.DISCIPLINE_ID =:disciplineID ', {
         disciplineID: discipline?.disciplineID,
       })
       .execute();
