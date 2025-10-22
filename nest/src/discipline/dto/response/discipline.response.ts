@@ -5,8 +5,8 @@ export class DisciplineResponse {
   disciplineID?: number;
 
   @Expose()
-  name: string = '';
+  name: string;
 
   @Expose()
-  description: string = '';
+  description: string;
 }
