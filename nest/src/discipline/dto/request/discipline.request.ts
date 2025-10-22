@@ -19,8 +19,4 @@ export class DisciplineRequest {
     message: 'O tamanho máximo é de 250 caracteres para a descrição da disciplina',
   })
   description: string;
-
-  constructor(data: Partial<DisciplineRequest> = {}) {
-    Object.assign(this, data);
-  }
 }

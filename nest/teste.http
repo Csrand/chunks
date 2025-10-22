@@ -15,7 +15,7 @@ GET http://localhost:8000/rest/sistema/discipline/listar
 ###
 
 ### Buscar disciplina por ID
-GET http://localhost:8000/rest/sistema/discipline/buscar/23
+GET http://localhost:8000/rest/sistema/discipline/buscar/2
 
 ###
 

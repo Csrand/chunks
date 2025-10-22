@@ -21,7 +21,7 @@ export class DisciplineServiceUpdate {
   ): Promise<DisciplineResponse> {
     let discipline = ConverterDiscipline.toDiscipline(disciplineRequest);
 
-    const disciplineCadastrada = await this.disciplineServiceFindOne.findById(disciplineID);
+    const disciplineCadastrada = await this.disciplineServiceFindOne.findOne(disciplineID);
 
     if (!disciplineCadastrada) {
       throw new HttpException('Discipline não cadastrada', HttpStatus.NOT_FOUND);

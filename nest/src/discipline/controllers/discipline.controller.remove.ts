@@ -21,7 +21,7 @@ export class DisciplineControllerRemove {
   @Delete(ROTA.DISCIPLINE.DELETE)
   async remove(
     @Req() res: Request,
-    @Param('disciplineID', ParseIntPipe) disciplineID: number,
+    @Param('id', ParseIntPipe) disciplineID: number,
   ): Promise<Result<void>> {
     await this.disciplineServiceRemove.remove(disciplineID);
     return MensagemSistema.showMensagem(

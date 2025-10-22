@@ -16,8 +16,8 @@ export class ConverterDiscipline {
     return discipline;
   }
 
-  static toDisciplineResponse(discipline: Discipline): DisciplineResponse {
-    return plainToInstance(DisciplineResponse, discipline, {
+  static toDisciplineResponse(disciplines: Discipline): DisciplineResponse {
+    return plainToInstance(DisciplineResponse, disciplines, {
       excludeExtraneousValues: true,
     });
   }

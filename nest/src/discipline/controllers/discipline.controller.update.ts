@@ -24,7 +24,7 @@ export class DisciplineControllerUpdate {
   @Put(ROTA.DISCIPLINE.UPDATE)
   async update(
     @Req() res: Request,
-    @Param('disciplineID', ParseIntPipe) disciplineID: number,
+    @Param('id', ParseIntPipe) disciplineID: number,
     @Body() disciplineRequest: DisciplineRequest,
   ): Promise<Result<DisciplineResponse>> {
     const response = await this.disciplineServiceUpdate.update(disciplineID, disciplineRequest);

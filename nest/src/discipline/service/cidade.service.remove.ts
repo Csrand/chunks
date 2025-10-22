@@ -13,7 +13,7 @@ export class DisciplineServiceRemove {
   ) {}
 
   async remove(disciplineID: number): Promise<void> {
-    const discipline = await this.service.findById(disciplineID);
+    const discipline = await this.service.findOne(disciplineID);
 
     if (!discipline?.disciplineID) {
       throw new HttpException('Discipline não cadastrada', HttpStatus.NOT_FOUND);

@@ -26,7 +26,7 @@ export class DisciplineControllerFindOne {
     const response = await this.disciplineServiceFindOne.findOne(id);
     return MensagemSistema.showMensagem(
       HttpStatus.OK,
-      'Discipline localizada com sucesso!',
+      'Disciplina localizada com sucesso!',
       response,
       req.path,
       null,
