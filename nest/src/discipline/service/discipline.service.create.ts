@@ -18,7 +18,7 @@ export class DisciplineServiceCreate {
 
     const disciplineCadastrada = await this.disciplineRepository
       .createQueryBuilder('discipline')
-      .where('discipline.name =:nome', { nome: discipline.name })
+      .where('discipline.name =:name', { name: discipline.name })
       .getOne();
 
       if (disciplineCadastrada){
