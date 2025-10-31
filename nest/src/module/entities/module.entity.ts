@@ -1,26 +1,39 @@
-import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString, MaxLength, IsNumber } from 'class-validator';
+import { BaseEntity } from '../../commons/entity/base.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-export class Bd2Module{
-  @Type(() => Number)
-  @IsOptional()
+@Entity('BD2_MODULES')
+export class Bd2Module extends BaseEntity {
+  @PrimaryGeneratedColumn('increment', {
+    name: 'MODULE_ID',
+    type: 'number',
+  })
   moduleId?: number;
 
-  @IsNotEmpty({ message: 'ID da Disciplina deve ser informado' })
-  @IsNumber({}, { message: 'Discipline ID deve ser um número' })
-  disciplineId?: number;
-
-  @IsNotEmpty({ message: 'Título do Módulo deve ser informado' })
-  @IsString({ message: 'O valor tem que ser somente texto' })
-  @MaxLength(100, {
-    message: 'O tamanho máximo é de 100 caracteres para o título do módulo',
+  @Column({
+    name: 'DISCIPLINE_ID',
+    type: 'number',
   })
-  title: string;
+  disciplineId: number;
 
-  @IsNotEmpty({ message: 'Descrição do módulo deve ser informada' })
-  @IsString({ message: 'A informação só pode conter texto' })
-  @MaxLength(250, {
-    message: 'O tamanho máximo é de 250 caracteres para a descrição do módulo',
+  @Column({
+    name: 'TITLE',
+    type: 'varchar2',
+    length: 100,
   })
-  description: string;
+  title?: string = '';
+
+  @Column({
+    name: 'DESCRIPTION',
+    type: 'varchar2',
+    length: 250,
+  })
+  description?: string = '';
+
+  @OneToMany(()=> Bd2Module, (bd2Module) => bd2Module.disciplineId)
+  modules: Bd2Module[]
+
+  constructor(data: Partial<Bd2Module> = {}) {
+    super();
+    Object.assign(this, data);
+  }
 }

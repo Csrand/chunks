@@ -1,4 +1,4 @@
-import { DISCIPLINE} from './constants.sistema';
+import { BD2MODULE, DISCIPLINE} from './constants.sistema';
 
 export const SERVIDOR = 'http://localhost:8000';
 export const CLINTE = 'http://localhost:3000';
@@ -25,6 +25,7 @@ function gerarRotasSistema(entity: string) {
 
 export const ROTA = {
   DISCIPLINE: gerarRotasSistema(DISCIPLINE),
+  BD2MODULE: gerarRotasSistema(BD2MODULE),
 };
 
 //criar rotas de forma dinâmica para os endpoints
