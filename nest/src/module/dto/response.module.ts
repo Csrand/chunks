@@ -8,7 +8,7 @@ export class Bd2ModuleResponse {
   disciplineId?: number;
 
   @Expose()
-  title?: string;
+  title: string;
 
   @Expose()
   description: string;

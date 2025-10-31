@@ -1,5 +1,6 @@
+import { Discipline } from 'src/discipline/entity/discipline.entity';
 import { BaseEntity } from '../../commons/entity/base.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('BD2_MODULES')
 export class Bd2Module extends BaseEntity {
@@ -20,17 +21,18 @@ export class Bd2Module extends BaseEntity {
     type: 'varchar2',
     length: 100,
   })
-  title?: string = '';
+  title: string;
 
   @Column({
     name: 'DESCRIPTION',
     type: 'varchar2',
     length: 250,
   })
-  description?: string = '';
+  description?: string;
 
-  @OneToMany(()=> Bd2Module, (bd2Module) => bd2Module.disciplineId)
-  modules: Bd2Module[]
+  @ManyToOne(()=> Discipline, (discipline) => discipline.modules, {onDelete: 'CASCADE'})
+  @JoinColumn({name:'DISCIPLINE_ID'})
+  discipline: Discipline
 
   constructor(data: Partial<Bd2Module> = {}) {
     super();

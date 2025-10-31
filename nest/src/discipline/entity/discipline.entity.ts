@@ -24,7 +24,7 @@ export class Discipline extends BaseEntity {
   })
   description?: string = '';
 
-  @OneToMany(()=> Bd2Module, (bd2Module) => bd2Module.disciplineId)
+  @OneToMany(()=> Bd2Module, (bd2Module) => bd2Module.discipline)
   modules: Bd2Module[]
 
   constructor(data: Partial<Discipline> = {}) {

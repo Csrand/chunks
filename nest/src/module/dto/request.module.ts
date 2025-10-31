@@ -9,7 +9,7 @@ export class Bd2ModuleRequest {
 
   @Type(() => Number)
   @IsNotEmpty({ message: 'Disciplina a qual o modulo pertence, deve ser informada.' })
-  disciplineId?: number;
+  disciplineId: number;
 
   @IsOptional()
   @IsString()
