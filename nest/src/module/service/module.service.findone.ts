@@ -19,7 +19,7 @@ export class Bd2ModuleServiceFindOne {
       throw new HttpException('Bd2Module não cadastrada', HttpStatus.NOT_FOUND);
     }
 
-    return ConverterModulo.toBd2Module(bd2Module);
+    return ConverterModulo.toBd2ModuleResponse(bd2Module);
   }
 
   async findById(bd2ModuleID: number): Promise<Bd2Module | null> {

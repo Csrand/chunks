@@ -27,6 +27,6 @@ export class Bd2ModuleServiceCreate {
 
         bd2module = await this.bd2ModuleRepository.save(bd2module);
 
-        return ConverterModulo.toBd2Module(bd2module);
+        return ConverterModulo.toBd2ModuleResponse(bd2module);
     }
 }

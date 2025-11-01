@@ -1,9 +1,8 @@
 import { Discipline } from 'src/discipline/entity/discipline.entity';
-import { BaseEntity } from '../../commons/entity/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('BD2_MODULES')
-export class Bd2Module extends BaseEntity {
+export class Bd2Module {
   @PrimaryGeneratedColumn('increment', {
     name: 'MODULE_ID',
     type: 'number',
@@ -35,7 +34,6 @@ export class Bd2Module extends BaseEntity {
   discipline: Discipline
 
   constructor(data: Partial<Bd2Module> = {}) {
-    super();
     Object.assign(this, data);
   }
 }

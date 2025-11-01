@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Bd2ModuleModule } from 'src/module/bd2module.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { DisciplineModule } from 'src/discipline/discipline.module';
@@ -43,6 +44,7 @@ oracledb.initOracleClient({
       })
     }),
     DisciplineModule,
+    Bd2ModuleModule,
     ],
   controllers: [AppController],
   providers: [AppService],
