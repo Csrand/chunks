@@ -25,7 +25,7 @@ export class Bd2ModuleServiceFindOne {
   async findById(bd2ModuleID: number): Promise<Bd2Module | null> {
     const bd2Module = await this.bd2ModuleRepository
       .createQueryBuilder('bd2Module')
-      .where('bd2Module.BD2_MODULE_ID = :bd2ModuleID', { bd2ModuleID: bd2ModuleID })
+      .where('bd2Module.MODULE_ID = :bd2ModuleID', { bd2ModuleID: bd2ModuleID })
       .getOne();
 
     return bd2Module;
