@@ -3,7 +3,8 @@ POST http://localhost:8000/rest/sistema/discipline/criar
 Content-Type: application/json
 
 {
-  "name": "Matemática",
+  "disciplineId": "2",
+  "title": "Matemática",
   "description": "Disciplina de matemática"
 }
 
@@ -20,7 +21,7 @@ GET http://localhost:8000/rest/sistema/module/buscar/2
 ###
 
 ### Atualizar disciplina
-PUT http://localhost:8000/rest/sistema/discipline/alterar/23
+PUT http://localhost:8000/rest/sistema/discipline/alterar/43
 Content-Type: application/json
 
 {
@@ -31,4 +32,4 @@ Content-Type: application/json
 ###
 
 ### Remover disciplina
-DELETE http://localhost:8000/rest/sistema/discipline/excluir/23
+DELETE http://localhost:8000/rest/sistema/discipline/excluir/43

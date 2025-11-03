@@ -18,7 +18,7 @@ export class Bd2ModuleServiceCreate {
 
         const bd2ModuleCadastrado = await this.bd2ModuleRepository
             .createQueryBuilder('bd2Module')
-            .where('bd2Module.title =:title', { title: bd2module.title })
+            .where('bd2Module.TITLE =:title', { title: bd2module.title })
             .getOne();
 
         if (bd2ModuleCadastrado){
