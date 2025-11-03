@@ -9,18 +9,22 @@ import { Bd2ModuleControllerFindOne } from './controllers/module.controller.find
 import { Bd2ModuleServiceCreate } from './service/module.service.create';
 import { Bd2ModuleServiceFindAll } from './service/module.service.findall';
 import { Bd2ModuleServiceFindOne } from './service/module.service.findone';
+import { Bd2moduleControllerUpdate } from './controllers/module.controller.update';
+import { Bd2ModuleServiceUpdate } from './service/module.service.update';
 
 
 const bd2ModuleControllers = [
   Bd2ModuleControllerCreate,
   Bd2ModuleControllerFindAll,
   Bd2ModuleControllerFindOne,
+  Bd2moduleControllerUpdate
 ];
 
 const bd2ModuleServices = [
   Bd2ModuleServiceCreate,
   Bd2ModuleServiceFindAll,
   Bd2ModuleServiceFindOne,
+  Bd2ModuleServiceUpdate
 ];
 
 @Module({

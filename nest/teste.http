@@ -1,5 +1,5 @@
 ### Criar disciplina
-POST http://localhost:8000/rest/sistema/discipline/criar
+POST http://localhost:8000/rest/sistema/module/criar
 Content-Type: application/json
 
 {
@@ -21,11 +21,12 @@ GET http://localhost:8000/rest/sistema/module/buscar/2
 ###
 
 ### Atualizar disciplina
-PUT http://localhost:8000/rest/sistema/discipline/alterar/43
+PUT http://localhost:8000/rest/sistema/module/alterar/35
 Content-Type: application/json
 
 {
-  "name": "Física",
+  "disciplineId": "1",
+  "title": "Física",
   "description": "Disciplina de física"
 }
 

@@ -13,7 +13,7 @@ export class Bd2ModuleRequest {
 
   @IsOptional()
   @IsString()
-  disciplineName?: string;
+  disciplineName: string;
 
   @IsNotEmpty({ message: 'Titulo do Módulo deve ser informado' })
   @IsString({ message: 'O valor tem quer ser somente texto' })
