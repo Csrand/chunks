@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDisciplineDto } from './dto/create-discipline.dto';
-import { UpdateDisciplineDto } from './dto/update-discipline.dto';
+import { CreateDisciplineDto } from '../dto/create-discipline.dto';
+import { UpdateDisciplineDto } from '../dto/update-discipline.dto';
 
 @Injectable()
 export class DisciplineService {

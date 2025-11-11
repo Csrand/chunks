@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { DisciplineService } from './discipline.service';
-import { CreateDisciplineDto } from './dto/create-discipline.dto';
-import { UpdateDisciplineDto } from './dto/update-discipline.dto';
+import { DisciplineService } from '../services/discipline.service';
+import { CreateDisciplineDto } from '../dto/create-discipline.dto';
+import { UpdateDisciplineDto } from '../dto/update-discipline.dto';
 
 @Controller('discipline')
 export class DisciplineController {
