@@ -19,7 +19,7 @@ export class Discipline extends BaseEntity{
         name: 'DESCRIPTION',
         type: 'text',
     })
-    discipleDescription: string;
+    description: string;
 
     constructor(data: Partial<Discipline> = {}){
         super();
