@@ -9,11 +9,11 @@ import {
   Req,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import { DisciplineRequest } from "..//request/discipline.request";
+import { DisciplineRequestDto } from "../dto/request/discipline.request.dto";
 import { ROUTE } from "src/commons/constants/url.sistema";
 import { MessageSystem } from "src/commons/message/message.system";
-import { Result } from "src/commons/mensagens/message";
-import { DisciplineResponse } from "..//response/discipline.response.";
+import { Result } from "src/commons/message/message";
+import { DisciplineResponseDto } from "../dto/response/discipline.response.dto";
 import { DisciplineServiceUpdate } from '../service/discipline.service.update';
 
 @Controller(ROUTE.DISCIPLINE.BASE)
@@ -25,8 +25,8 @@ export class DisciplineControllerUpdate {
   async create(
     @Req() req: Request,
     @Param('disciplineId', ParseIntPipe) disciplineId: number,
-    @Body() disciplineRequest: DisciplineRequest
-  ): Promise<Result<DisciplineResponse>> {
+    @Body() disciplineRequest: DisciplineRequestDto
+  ): Promise<Result<DisciplineResponseDto>> {
     const response = await this.disciplineServiceUpdate.update(disciplineId, disciplineRequest);
 
     return MessageSystem.showMessage(
