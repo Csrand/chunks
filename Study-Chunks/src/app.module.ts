@@ -5,6 +5,7 @@ import * as Joi from 'joi';
 import { DisciplineModule } from './discipline/discipline.module';
 import { ModulesModule } from './modules/modules.module';
 import { SubmoduleModule } from './submodule/submodule.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SubmoduleModule } from './submodule/submodule.module';
     DisciplineModule,
     ModulesModule,
     SubmoduleModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
