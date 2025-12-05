@@ -1,0 +1,91 @@
+```
+# Dependencies
+node_modules/
+node_modules/
+.pnpm-store/
+.yarn/
+yarn-error.log
+
+# Build outputs
+dist/
+build/
+coverage/
+.nyc_output/
+.eslintcache
+
+# Environment variables
+.env
+.env.local
+.env.*
+!.env.example
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# TypeScript
+*.tsbuildinfo
+*.js.map
+*.d.ts
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output/
+
+# Compiled binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Compression
+*.zip
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.7z
+*.rar
+
+# Database
+*.db
+*.db-journal
+
+# Testing
+.jest/
+jest/
+mocha.opts
+
+# Bower dependency directory (if you are using bower)
+bower_components/
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# TypeScript v1 declaration files
+typings/
+
+# System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+```

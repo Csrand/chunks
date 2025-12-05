@@ -1,4 +1,4 @@
-import { DISCIPLINE, MODULES, SUBMODULES } from "./constants.system";
+import { DISCIPLINE, MODULES, SUBMODULES, USERS, QUESTIONS, USER_PROGRESS, ANSWERS, BADGES } from "./constants.system";
 
 export const SERVER = 'http://localhost:8000';
 export const CLIENT = 'http://localhost:3000';
@@ -26,4 +26,9 @@ export const ROUTE = {
   DISCIPLINE: buildRoutes(DISCIPLINE, 'disciplineId'),
   MODULES: buildRoutes(MODULES, 'moduleId'),
   SUBMODULES: buildRoutes(SUBMODULES, 'submoduleId'),
+  USERS: buildRoutes(USERS, 'userId'),
+  QUESTIONS: buildRoutes(QUESTIONS, 'questionId'),
+  USER_PROGRESS: buildRoutes(USER_PROGRESS, 'progressId'),
+  ANSWERS: buildRoutes(ANSWERS, 'answerId'),
+  BADGES: buildRoutes(BADGES, 'badgeId'),
 };
