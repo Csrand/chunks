@@ -1,0 +1,103 @@
+* #defaultLayout {
+  display: flex;
+  height: 100vh;
+}
+
+#defaultLayout aside {
+  width: 240px;
+  background-color: #5b08a7;
+  padding: 1rem;
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+}
+
+#defaultLayout aside > a {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+#defaultLayout aside > a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+#defaultLayout .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+#defaultLayout header {
+  height: 80px;
+  padding: 0 2rem;
+  background-color: white;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#defaultLayout header .system-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #5b08a7;
+}
+
+#defaultLayout header .username {
+  font-weight: 500;
+  color: #333;
+}
+
+#defaultLayout header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#defaultLayout header .btn-logout {
+  padding: 0.5rem 1rem;
+  background-color: #5b08a7;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+#defaultLayout header .btn-logout:hover {
+  background-color: #480982;
+}
+
+#defaultLayout main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.animated {
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
